@@ -17,7 +17,7 @@ class CreateTeachersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('address');
-            $table->integer('phone');
+            $table->string('phone');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
