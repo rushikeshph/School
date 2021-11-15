@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Users;
+use App\Models\Api_keys;
 use Illuminate\Support\Facades\DB;
 
 class AuthPermissionLevel
@@ -18,8 +19,10 @@ class AuthPermissionLevel
     public function handle($request, Closure $next,$level)
     {
         // Pre-Middleware Action
-       
-       $apikey = $request->bearerToken();
+        $apikey = $request->bearerToken();
+        
+       $user_ApiDetails = new Api_keys;
+        
        $user_ApiDetails = DB::table('api__keys')
        ->where('key', '=', $apikey)
        ->get();
