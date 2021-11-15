@@ -26,13 +26,7 @@ class AuthPermissionLevel
         
        $userDetails =  Users::find($user_ApiDetails[0]->user_id);
 
-      /* $Users = DB::table('users')->where('id', '=', function ($query) {
-        $query->select('user_id')
-            ->from('api__keys')
-            ->where('key','=' ,$apikey);
-           })->get();*/
-         
-      if (isset($userDetails)){
+       if (isset($userDetails)){
 			$userPermission = $userDetails->permission_level;
 			
 			if($userPermission < $level) {

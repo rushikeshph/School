@@ -20,8 +20,6 @@ class AuthenticateUserKey
     public function handle($request, Closure $next)
     {
    
-     
-        $user = new Users;
         $user_apikey = new Api_keys;
 
         $apikey = $request->bearerToken();
