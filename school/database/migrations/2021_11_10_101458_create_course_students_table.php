@@ -19,8 +19,8 @@ class CreateCourseStudentsTable extends Migration
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('CASCADE');
             $table->integer('student_id')->unsigned();;
             $table->foreign('student_id')->references('id')->on('students')->onDelete('CASCADE');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamps();
+          
         });
     }
 

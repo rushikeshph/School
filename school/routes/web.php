@@ -16,3 +16,13 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+
+//$router->get('userkeyauthenticte', ['middleware' => 'auth_user_key', EmployeeController::class,'index']);
+$router->get('userkeyauthenticte/{id}', ['middleware' => 'auth_user_key','uses' => 'UsersController@index']);
+
+$router->group(['middleware' => ['auth_level:600']], function () use ($router) {
+    $router->get('/teachers', '\App\Http\Controllers\TeacherController@index');
+});
+
+

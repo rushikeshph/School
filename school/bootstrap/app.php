@@ -78,6 +78,8 @@ $app->configure('app');
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
+     'auth_user_key' => App\Http\Middleware\AuthenticateUserKey::class,
+     'auth_level' => App\Http\Middleware\AuthPermissionLevel::class
  ]);
 
 /*
