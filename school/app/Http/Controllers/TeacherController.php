@@ -102,24 +102,38 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $teacher_id)
     {
-        $this->validate($request,[ 
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string|min:10|max:10'
-        ]);
-
         $teacher = Teachers::find($teacher_id);
         if(is_null($teacher))
         {
             return response()->json('Teacher with given id not found',401);
         }
-        
-         $teacher->name =  $request->input('name');
-         $teacher->address =  $request->input('address');
-         $teacher->phone =  $request->input('phone');
-         $teacher->save();
+       if($request->method() == 'PUT'){
+               $this->validate($request,[ 
+                    'name' => 'required|string',
+                    'address' => 'required|string',
+                    'phone' => 'required|string|min:10|max:10'
+                   ]);
+       
+                 $teacher->name =  $request->input('name');
+                 $teacher->address =  $request->input('address');
+                 $teacher->phone =  $request->input('phone');
+                 $teacher->save();
 
-        return response()->json('teacher updated succesfully',200);
+               return response()->json('teacher updated succesfully',200);
+    }else{
+      
+        $inputs =  $this->validate($request,[ 
+            'name' => 'string',
+            'address' => 'string',
+            'phone' => 'string|min:10|max:10'
+           ]);
+
+           $teacher->update($inputs);
+
+           return response()->json('teacher updated succesfully',200);
+
+    }
+
     }
 
     /**
@@ -139,11 +153,11 @@ class TeacherController extends Controller
              $teacher_courses = DB::table('courses')->where('teacher_id','=',$teacher_id)->get();
              if(isset($teacher_courses))
              {
-                 $teacher->delete();
-                 return response()->json('teacher deleted successfully'.$teacher_id,200);
+                return response()->json('active courses assign to this teacher please delete courses first');
              }
              else{
-                    return response()->json('active courses assign to this teacher please delete courses first');
+                    $teacher->delete();
+                    return response()->json('teacher deleted successfully '.$teacher_id,200);
              }
 
          }

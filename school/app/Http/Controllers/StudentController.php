@@ -101,7 +101,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, $student_id)
     {
-      
+        $student = Students::find($student_id);
+        if(is_null($student))
+        {
+            return response()->json('student with given id not found',401);
+        }
+      if($request->method() == 'PUT'){
         $this->validate($request,[ 
             'name' => 'required|string',
             'address' => 'required|string',
@@ -109,13 +114,7 @@ class StudentController extends Controller
             'career' => 'required|in:engineering,maths,physics'
          ]);
 
-        $student = Students::find($student_id);
-        if(is_null($student))
-        {
-            return response()->json('student with given id not found',401);
-        }
-        
-         $student->name =  $request->input('name');
+        $student->name =  $request->input('name');
          $student->address =  $request->input('address');
          $student->phone =  $request->input('phone');
          $student->career = $request->input('career');
@@ -123,6 +122,19 @@ class StudentController extends Controller
          $student->save();
 
         return response()->json('student updated succesfully',200);
+      }
+      else{
+        $inputs =  $this->validate($request,[ 
+            'name' => 'string',
+            'address' => 'string',
+            'phone' => 'string|min:10|max:10',
+            'career' => 'string'
+           ]);
+
+           $student->update($inputs);
+
+           return response()->json('student updated succesfully',200);
+      }
     }
 
     /**

@@ -47,4 +47,24 @@ $router->group(['middleware' => ['auth_level:200']], function () use ($router) {
 
 });
 
+$router->group(['middleware' => ['auth_level:600']], function () use ($router) {
+   
+
+
+    $router->get('/teachers/{teacher_id}/courses', '\App\Http\Controllers\TeacherCourseController@index'); //get all the courses for that teacher
+    $router->post('/teachers/{teacher_id}/courses', '\App\Http\Controllers\TeacherCourseController@store'); //Create course with teacher_id passed
+    $router->put('/teachers/{teacher_id}/courses/{course_id}', '\App\Http\Controllers\TeacherCourseController@update'); //update course with teacher_id and course_id passed
+    $router->patch('/teachers/{teacher_id}/courses/{course_id}', '\App\Http\Controllers\TeacherCourseController@update'); //update course with teacher_id and course_id passed
+    $router->delete('/teachers/{teacher_id}/courses/{course_id}', '\App\Http\Controllers\TeacherCourseController@destroy'); //delete course with teacher_id and course_id passed
+    
+   /* valdate value coulumn to be number and all columns to be required
+    check the course with id {$course_id} is asociated with teacher {teacher_id} before updating and deleting
+    detach the student from courses before deleting the course*/
+    
+    $router->get('/courses/{course_id}/students', '\App\Http\Controllers\CourseStudentController@index'); // get all student for the course
+    $router->post('/courses/{course_id}/students/{student_id}', '\App\Http\Controllers\CourseStudentController@store'); //add student to course
+    $router->delete('/courses/{course_id}/students/{student_id}', '\App\Http\Controllers\CourseStudentController@destroy'); //remove student from course
+    
+    
+    });
 
