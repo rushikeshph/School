@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Courses;
 use App\Models\Teachers;
 
 class TeacherController extends Controller
@@ -14,11 +16,14 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers_list = new Teachers;
-
+       
         $teachers_list = Teachers::all();
+        if(isset($teachers_list))
+        {
+            return response()->json('There is not teachers data');
+        }
 
-        return response()->json( $teachers_list,200);
+        return response()->json($teachers_list,200);
     }
 
     /**
@@ -39,7 +44,22 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     $this->validate($request,[ 
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'phone' => 'required|string|min:10|max:10'
+        ]);
+
+       $newTeacher = new Teachers;
+        
+       $newTeacher->name =  $request->input('name');
+       $newTeacher->address =  $request->input('address');
+       $newTeacher->phone =  $request->input('phone');
+       
+   
+       $newTeacher->save();
+        
+       return response()->json($newTeacher);
     }
 
     /**
@@ -48,9 +68,18 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($teacher_id)
     {
-        //
+         $teacher = Teachers::find($teacher_id);
+
+         if(is_null($teacher))
+         {
+             return response()->json('Teachers with given '.$teacher_id.' not found',404);
+         }
+         
+         return response()->json($teacher,200);        
+      
+
     }
 
     /**
@@ -71,9 +100,26 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $teacher_id)
     {
-        //
+        $this->validate($request,[ 
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'phone' => 'required|string|min:10|max:10'
+        ]);
+
+        $teacher = Teachers::find($teacher_id);
+        if(is_null($teacher))
+        {
+            return response()->json('Teacher with given id not found',401);
+        }
+        
+         $teacher->name =  $request->input('name');
+         $teacher->address =  $request->input('address');
+         $teacher->phone =  $request->input('phone');
+         $teacher->save();
+
+        return response()->json('teacher updated succesfully',200);
     }
 
     /**
@@ -82,8 +128,24 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($teacher_id)
     {
-        //
+        $teacher = Teachers::find($teacher_id);
+         if(is_null($teacher))
+         {
+             return response()->json('teacher not found');
+         }
+         else{
+             $teacher_courses = DB::table('courses')->where('teacher_id','=',$teacher_id)->get();
+             if(isset($teacher_courses))
+             {
+                 $teacher->delete();
+                 return response()->json('teacher deleted successfully'.$teacher_id,200);
+             }
+             else{
+                    return response()->json('active courses assign to this teacher please delete courses first');
+             }
+
+         }
     }
 }

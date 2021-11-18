@@ -30,9 +30,10 @@ class AuthPermissionLevel
 			$userPermission = $userDetails->permission_level;
 			
 			if($userPermission < $level) {
-				return response()->json('User has not valid permissions ', 404);
+				return response()->json('User has not valid permissions', 404);
 			}
-		} else {
+		} 
+        else{
 			return response()->json('User Not Found', 404);
 		}    
 
