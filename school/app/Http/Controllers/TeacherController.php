@@ -20,10 +20,10 @@ class TeacherController extends Controller
         $teachers_list = Teachers::all();
         if(isset($teachers_list))
         {
-            return response()->json('There is not teachers data');
+            return response()->json($teachers_list,200);
         }
-
-        return response()->json($teachers_list,200);
+        return response()->json('There is not teachers data');
+       
     }
 
     /**

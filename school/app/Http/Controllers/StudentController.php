@@ -18,10 +18,10 @@ class StudentController extends Controller
         $student_list = Students::all();
         if(isset($student_list))
         {
-            return response()->json('There is no students data');
+            return response()->json($student_list,200);
         }
-
-        return response()->json($student_list,200);
+        return response()->json('There is no students data');
+        
     }
 
     /**
